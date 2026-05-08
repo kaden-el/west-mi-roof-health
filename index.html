@@ -24,10 +24,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy: #0f1f3d;
-      --blue: #1d4ed8;
-      --blue-light: #3b82f6;
-      --accent: #f59e0b;
+      --navy: #7f1d1d;
+      --blue: #dc2626;
+      --blue-light: #ef4444;
+      --accent: #ffffff;
       --grey-100: #f3f4f6;
       --grey-400: #9ca3af;
       --grey-600: #4b5563;
@@ -66,14 +66,14 @@
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(160deg, var(--navy) 0%, #1e3a6e 100%);
+      background: linear-gradient(160deg, var(--navy) 0%, #b91c1c 100%);
       color: var(--white);
       text-align: center;
       padding: 60px 24px 48px;
     }
     .hero .badge {
       display: inline-block;
-      background: rgba(245,158,11,0.15);
+      background: rgba(255,255,255,0.15);
       border: 1px solid var(--accent);
       color: var(--accent);
       font-size: 0.78rem;
@@ -104,7 +104,7 @@
     .btn-primary {
       display: inline-block;
       background: var(--accent);
-      color: #1a1100;
+      color: #7f1d1d;
       font-size: 1.1rem;
       font-weight: 800;
       padding: 16px 36px;
@@ -116,7 +116,7 @@
       width: 100%;
       max-width: 360px;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,255,255,0.3); }
     .hero-sub {
       margin-top: 14px;
       font-size: 0.82rem;
@@ -141,7 +141,7 @@
       align-items: center;
       gap: 6px;
     }
-    .trust-bar .item svg { flex-shrink: 0; }
+    .trust-bar .item svg { flex-shrink: 0; color: var(--blue); }
 
     /* ── SECTIONS ── */
     section { padding: 56px 24px; }
@@ -154,6 +154,7 @@
       color: var(--blue);
       margin-bottom: 10px;
     }
+    .step-num { background: var(--blue) !important; }
     h2 {
       text-align: center;
       font-size: clamp(1.4rem, 4vw, 2rem);
@@ -265,8 +266,8 @@
     }
     .btn-submit {
       width: 100%;
-      background: var(--accent);
-      color: #1a1100;
+      background: var(--blue);
+      color: #ffffff;
       font-size: 1.1rem;
       font-weight: 800;
       padding: 16px;
@@ -276,7 +277,7 @@
       margin-top: 8px;
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(220,38,38,0.35); }
     .form-disclaimer {
       text-align: center;
       font-size: 0.75rem;
@@ -333,19 +334,19 @@
   <!-- TRUST BAR -->
   <div class="trust-bar">
     <div class="item">
-      <svg width="16" height="16" fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       100% Free Inspection
     </div>
     <div class="item">
-      <svg width="16" height="16" fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Results in 24 Hours
     </div>
     <div class="item">
-      <svg width="16" height="16" fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
       Insurance Claim Specialists
     </div>
     <div class="item">
-      <svg width="16" height="16" fill="none" stroke="#1d4ed8" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <svg width="16" height="16" fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       West Michigan Locals
     </div>
   </div>
@@ -421,7 +422,7 @@
       </div>
 
       <button type="submit" class="btn-submit">Check My Roof Now — 100% Free &#8594;</button>
-      <p class="form-disclaimer">By submitting, you agree to be contacted about your free roof inspection. We respect your privacy and never sell your information.</p>
+      <p class="form-disclaimer">By submitting this form, you agree to be contacted by West Michigan Roof Health and its roofing contractor partners regarding your free inspection. Your information may be shared with licensed contractors in your area.</p>
     </form>
 
     <div id="success-msg">
@@ -432,7 +433,7 @@
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 West Michigan Roof Health. Grand Rapids, MI &nbsp;|&nbsp; <a href="mailto:info@westmi-roof-health.com" style="color:#64748b;">info@westmi-roof-health.com</a></p>
-    <p style="margin-top:6px;">Not affiliated with any insurance company. Free inspection offer subject to availability.</p>
+    <p style="margin-top:6px;">Free inspection offer subject to availability in your area.</p>
   </footer>
 
   <script>
