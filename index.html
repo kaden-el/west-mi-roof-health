@@ -6,18 +6,18 @@
   <title>West Michigan Bath Audit | One-Day Bathtub & Shower Transformations</title>
   <meta name="description" content="Transform your outdated or unsafe bathtub or shower in one day. West Michigan homeowners get a free safety audit and a no-obligation quote from vetted local specialists." />
 
-  <!-- META PIXEL CODE — Replace YOUR_PIXEL_ID -->
+  <!-- META PIXEL CODE — Replace 2047039182913124 -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'YOUR_PIXEL_ID');
+    fbq('init', '2047039182913124');
     fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+    src="https://www.facebook.com/tr?id=2047039182913124&ev=PageView&noscript=1"/></noscript>
   <!-- END META PIXEL CODE -->
 
   <style>
@@ -758,9 +758,9 @@
         <p class="form-title">Claim Your Free Safety Audit</p>
         <p class="form-sub">Takes 60 seconds. A specialist contacts you within 24 hrs.</p>
 
-        <form id="hero-form" action="https://formspree.io/f/xzdoalqy" method="POST">
-          <input type="hidden" name="_subject" value="New Bath Audit Lead — Hero Form" />
+        <form id="hero-form" action="https://hook.us2.make.com/otue8qq7m9th4x3mztamp1bdjlfd1who" method="POST">
           <input type="hidden" name="lead_id" id="hero-lead-id" />
+          <input type="hidden" name="city" id="hero-city" />
           <div class="form-group">
             <label for="h-zip">Zip Code *</label>
             <input type="text" id="h-zip" name="zip" placeholder="49503" required inputmode="numeric" maxlength="5" />
@@ -769,10 +769,10 @@
             <label for="h-bath-condition">What is the current state of your bathtub/shower?</label>
             <select id="h-bath-condition" name="bath_condition">
               <option value="" disabled selected>Select an option</option>
-              <option value="old-dated">Old/Dated</option>
-              <option value="leaking">Leaking</option>
-              <option value="unsafe-seniors">Unsafe for Seniors</option>
-              <option value="want-upgrade">Just want an upgrade</option>
+              <option value="Old/Dated">Old/Dated</option>
+              <option value="Leaking/Water Damage">Leaking</option>
+              <option value="Unsafe for Seniors">Unsafe for Seniors</option>
+              <option value="Just Want an Upgrade">Just want an upgrade</option>
             </select>
           </div>
           <div class="form-group">
@@ -954,9 +954,9 @@
         <span class="form-header-dot"></span>
         <p>Accepting Audit Requests Now</p>
       </div>
-      <form id="bottom-form" action="https://formspree.io/f/xzdoalqy" method="POST">
-        <input type="hidden" name="_subject" value="New Bath Audit Lead — Bottom Form" />
+      <form id="bottom-form" action="https://hook.us2.make.com/otue8qq7m9th4x3mztamp1bdjlfd1who" method="POST">
         <input type="hidden" name="lead_id" id="bottom-lead-id" />
+        <input type="hidden" name="city" id="bottom-city" />
         <div class="form-group">
           <label for="b-zip">Zip Code *</label>
           <input type="text" id="b-zip" name="zip" placeholder="49503" required inputmode="numeric" maxlength="5" />
@@ -965,10 +965,10 @@
           <label for="b-bath-condition">What is the current state of your bathtub/shower?</label>
           <select id="b-bath-condition" name="bath_condition">
             <option value="" disabled selected>Select an option</option>
-            <option value="old-dated">Old/Dated</option>
-            <option value="leaking">Leaking</option>
-            <option value="unsafe-seniors">Unsafe for Seniors</option>
-            <option value="want-upgrade">Just want an upgrade</option>
+            <option value="Old/Dated">Old/Dated</option>
+            <option value="Leaking/Water Damage">Leaking</option>
+            <option value="Unsafe for Seniors">Unsafe for Seniors</option>
+            <option value="Just Want an Upgrade">Just want an upgrade</option>
           </select>
         </div>
         <div class="form-group">
@@ -1009,9 +1009,9 @@
       <h3>Don't Live with an Unsafe Bathroom</h3>
       <p>Most homeowners wait years before making the change. Takes 60 seconds to see what a one-day transformation could look like in your home.</p>
 
-      <form id="popup-form" action="https://formspree.io/f/xzdoalqy" method="POST">
-        <input type="hidden" name="_subject" value="New Bath Audit Lead — Exit Popup" />
+      <form id="popup-form" action="https://hook.us2.make.com/otue8qq7m9th4x3mztamp1bdjlfd1who" method="POST">
         <input type="hidden" name="lead_id" id="popup-lead-id" />
+        <input type="hidden" name="city" id="popup-city" />
         <div class="form-group">
           <label for="p-zip">Zip Code *</label>
           <input type="text" id="p-zip" name="zip" placeholder="49503" required inputmode="numeric" maxlength="5" />
@@ -1041,6 +1041,23 @@
     document.getElementById('hero-lead-id').value = generateLeadId();
     document.getElementById('bottom-lead-id').value = generateLeadId();
     document.getElementById('popup-lead-id').value = generateLeadId();
+
+    function attachZipLookup(zipInputId, cityHiddenId) {
+      const zipEl = document.getElementById(zipInputId);
+      const cityEl = document.getElementById(cityHiddenId);
+      zipEl.addEventListener('blur', function() {
+        const zip = zipEl.value.trim();
+        if (zip.length !== 5) return;
+        fetch('https://api.zippopotam.us/us/' + zip)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => { if (data) cityEl.value = data.places[0]['place name']; })
+          .catch(() => {});
+      });
+    }
+
+    attachZipLookup('h-zip', 'hero-city');
+    attachZipLookup('b-zip', 'bottom-city');
+    attachZipLookup('p-zip', 'popup-city');
 
     function handleForm(formId, successId) {
       const form = document.getElementById(formId);
