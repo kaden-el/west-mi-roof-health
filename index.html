@@ -940,7 +940,14 @@
         <button class="faq-q">What if I already have a quote from another company? <span class="faq-icon">+</span></button>
         <div class="faq-a"><div class="faq-a-inner">Perfect. Many homeowners use our independent audit as a second opinion — to verify that the quote covers the right scope, uses quality materials, and isn't padding the price. Bring the existing quote to your audit and our specialist will walk through it with you.</div></div>
       </div>
+      <div class="faq-item">
+        <button class="faq-q">How much should a bath remodel cost in 2026? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">A fair Grand Rapids tub-to-shower conversion lands between $7,000 and $10,000 cash. A senior-safety walk-in shower runs $9,000–$13,500. We published our full <a href="/cost-guide.html" style="color:var(--red);font-weight:700;">2026 Grand Rapids Bath Remodel Cost Guide</a> with median prices, red flags, and 5 questions to ask every contractor before signing.</div></div>
+      </div>
     </div>
+    <p style="text-align:center; margin-top: 28px; font-size: 0.92rem; color: var(--grey-600);">
+      Researching prices first? &nbsp;<a href="/cost-guide.html" style="color: var(--red); font-weight: 700;">Read the 2026 Cost Guide &rarr;</a>
+    </p>
   </section>
 
   <!-- BOTTOM FORM -->
@@ -1032,6 +1039,71 @@
   </div>
 
   <script>
+    // ── VISITOR ID (persists across sessions) ──
+    const LS = {
+      vid: 'wmba_visitor_id',
+      visits: 'wmba_visit_count',
+      lastSeen: 'wmba_last_seen',
+      formCache: 'wmba_form_cache',
+      partialSent: 'wmba_partial_sent'
+    };
+
+    function uuid() {
+      return 'V-' + Date.now().toString(36).toUpperCase() + '-' +
+        Math.random().toString(36).substring(2, 9).toUpperCase();
+    }
+
+    let visitorId = localStorage.getItem(LS.vid);
+    if (!visitorId) {
+      visitorId = uuid();
+      localStorage.setItem(LS.vid, visitorId);
+    }
+
+    let visitCount = parseInt(localStorage.getItem(LS.visits) || '0', 10) + 1;
+    localStorage.setItem(LS.visits, String(visitCount));
+    localStorage.setItem(LS.lastSeen, new Date().toISOString());
+
+    // ── ENGAGEMENT TRACKING ──
+    const sessionStart = Date.now();
+    let scrollDepthMax = 0;
+    let faqOpens = 0;
+    let scrollEventsFired = { d50: false, d75: false, d90: false };
+    let timeEventsFired = { t30: false, t60: false, t120: false };
+
+    function trackScroll() {
+      const doc = document.documentElement;
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = doc.scrollHeight;
+      if (total <= window.innerHeight) return;
+      const pct = Math.round((scrolled / total) * 100);
+      if (pct > scrollDepthMax) scrollDepthMax = pct;
+
+      if (typeof fbq !== 'undefined') {
+        if (pct >= 50 && !scrollEventsFired.d50) {
+          scrollEventsFired.d50 = true;
+          fbq('trackCustom', 'WBA_Scroll50');
+        }
+        if (pct >= 75 && !scrollEventsFired.d75) {
+          scrollEventsFired.d75 = true;
+          fbq('trackCustom', 'WBA_Scroll75');
+        }
+        if (pct >= 90 && !scrollEventsFired.d90) {
+          scrollEventsFired.d90 = true;
+          fbq('trackCustom', 'WBA_Scroll90');
+        }
+      }
+    }
+    window.addEventListener('scroll', trackScroll, { passive: true });
+
+    setInterval(function() {
+      const sec = Math.round((Date.now() - sessionStart) / 1000);
+      if (typeof fbq === 'undefined') return;
+      if (sec >= 30 && !timeEventsFired.t30) { timeEventsFired.t30 = true; fbq('trackCustom', 'WBA_Time30'); }
+      if (sec >= 60 && !timeEventsFired.t60) { timeEventsFired.t60 = true; fbq('trackCustom', 'WBA_Time60'); }
+      if (sec >= 120 && !timeEventsFired.t120) { timeEventsFired.t120 = true; fbq('trackCustom', 'WBA_Time120'); }
+    }, 5000);
+
+    // ── LEAD ID & ZIP LOOKUP ──
     function generateLeadId() {
       const ts = Date.now().toString(36).toUpperCase();
       const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -1059,18 +1131,152 @@
     attachZipLookup('b-zip', 'bottom-city');
     attachZipLookup('p-zip', 'popup-city');
 
+    // ── FORM CACHE: pre-fill on return, save on every keystroke ──
+    const FORM_FIELDS = [
+      ['h-zip', 'h-name', 'h-phone', 'h-bath-condition'],
+      ['b-zip', 'b-name', 'b-phone', 'b-bath-condition'],
+      ['p-zip', 'p-name', 'p-phone']
+    ];
+    const ALL_FIELD_IDS = FORM_FIELDS.flat();
+
+    function loadFormCache() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(LS.formCache) || '{}');
+        ALL_FIELD_IDS.forEach(function(id) {
+          const el = document.getElementById(id);
+          if (!el || !cached[id]) return;
+          // map keys based on suffix
+          const suffix = id.substring(2); // strip h-/b-/p-
+          if (cached[suffix]) el.value = cached[suffix];
+        });
+        // trigger zip lookups if zip was pre-filled
+        ['h-zip', 'b-zip', 'p-zip'].forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el && el.value.length === 5) el.dispatchEvent(new Event('blur'));
+        });
+      } catch (e) {}
+    }
+
+    function saveFormCache() {
+      const data = {};
+      ALL_FIELD_IDS.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el || !el.value) return;
+        const suffix = id.substring(2);
+        if (el.value.trim()) data[suffix] = el.value.trim();
+      });
+      localStorage.setItem(LS.formCache, JSON.stringify(data));
+    }
+
+    ALL_FIELD_IDS.forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', saveFormCache);
+    });
+
+    loadFormCache();
+
+    // ── FORM ABANDONMENT CAPTURE ──
+    // If user enters name + phone but never submits, fire a partial-lead webhook
+    // after 10s of inactivity OR on beforeunload. Once per session per form.
+    function getFormPartialData(formId) {
+      const form = document.getElementById(formId);
+      if (!form) return null;
+      const fd = new FormData(form);
+      const obj = {};
+      fd.forEach(function(v, k) { obj[k] = v; });
+      // Require name + phone to count as a real partial
+      if (!obj.name || !obj.phone) return null;
+      if (obj.phone.replace(/\D/g, '').length < 7) return null;
+      return obj;
+    }
+
+    function sendPartial(formId) {
+      const sentKey = LS.partialSent + ':' + formId;
+      if (sessionStorage.getItem(sentKey)) return;
+      const data = getFormPartialData(formId);
+      if (!data) return;
+      sessionStorage.setItem(sentKey, '1');
+
+      const fd = new FormData();
+      Object.keys(data).forEach(function(k) { fd.append(k, data[k]); });
+      fd.append('source', 'Partial');
+      fd.append('partial_form', formId);
+      attachEngagement(fd);
+
+      const form = document.getElementById(formId);
+      // Use sendBeacon if available (works during page unload)
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(form.action, fd);
+      } else {
+        fetch(form.action, { method: 'POST', body: fd, keepalive: true }).catch(function() {});
+      }
+    }
+
+    function setupAbandonment(formId) {
+      const form = document.getElementById(formId);
+      if (!form) return;
+      let timer = null;
+      const fire = function() {
+        clearTimeout(timer);
+        timer = setTimeout(function() { sendPartial(formId); }, 10000);
+      };
+      form.querySelectorAll('input, select').forEach(function(el) {
+        el.addEventListener('input', fire);
+        el.addEventListener('blur', fire);
+      });
+    }
+
+    setupAbandonment('hero-form');
+    setupAbandonment('bottom-form');
+    setupAbandonment('popup-form');
+
+    window.addEventListener('beforeunload', function() {
+      sendPartial('hero-form');
+      sendPartial('bottom-form');
+      sendPartial('popup-form');
+    });
+    window.addEventListener('pagehide', function() {
+      sendPartial('hero-form');
+      sendPartial('bottom-form');
+      sendPartial('popup-form');
+    });
+
+    // ── ENGAGEMENT SIGNALS attached to every submission ──
+    function attachEngagement(fd) {
+      const timeOnPage = Math.round((Date.now() - sessionStart) / 1000);
+      fd.append('visitor_id', visitorId);
+      fd.append('visit_count', String(visitCount));
+      fd.append('time_on_page_sec', String(timeOnPage));
+      fd.append('scroll_depth_pct', String(scrollDepthMax));
+      fd.append('faq_opens', String(faqOpens));
+      fd.append('referrer', document.referrer || 'direct');
+      fd.append('landing_path', window.location.pathname + window.location.search);
+      // Lead temperature: hot if any signal hits high engagement
+      const isHot = timeOnPage >= 60 || scrollDepthMax >= 75 || faqOpens >= 2 || visitCount >= 2;
+      fd.append('lead_temp', isHot ? 'Hot' : 'Warm');
+    }
+
     function handleForm(formId, successId) {
       const form = document.getElementById(formId);
       const success = document.getElementById(successId);
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+
+        const fd = new FormData(form);
+        // Mark this as a real submission so abandonment logic doesn't double-fire
+        sessionStorage.setItem(LS.partialSent + ':' + formId, '1');
+        if (!fd.get('source')) fd.append('source', 'Website');
+        attachEngagement(fd);
+
         fetch(form.action, {
           method: 'POST',
-          body: new FormData(form),
+          body: fd,
           headers: { 'Accept': 'application/json' }
         }).then(res => {
           if (res.ok) {
+            // Clear form cache so a fresh visitor on the same device starts clean next time
+            localStorage.removeItem(LS.formCache);
             form.style.display = 'none';
             success.style.display = 'block';
             if (formId !== 'popup-form') {
@@ -1093,13 +1299,17 @@
       });
     });
 
-    // FAQ accordion
+    // FAQ accordion + custom pixel event
     document.querySelectorAll('.faq-q').forEach(btn => {
       btn.addEventListener('click', () => {
         const item = btn.closest('.faq-item');
         const isOpen = item.classList.contains('open');
         document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        if (!isOpen) item.classList.add('open');
+        if (!isOpen) {
+          item.classList.add('open');
+          faqOpens += 1;
+          if (typeof fbq !== 'undefined') fbq('trackCustom', 'WBA_FAQOpen');
+        }
       });
     });
 
@@ -1111,6 +1321,7 @@
       if (popupShown) return;
       popupShown = true;
       popup.classList.add('active');
+      if (typeof fbq !== 'undefined') fbq('trackCustom', 'WBA_ExitPopupShown');
     }
 
     document.addEventListener('mouseleave', e => {
